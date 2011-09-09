@@ -17,7 +17,37 @@
 -- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 -- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-local bridge_env = {}
+local realvim = vim
+
+local function generate_scope_accessor(prefix)
+  local mt = {}
+
+  function mt:__index(key)
+    return realvim.eval(prefix .. ':' .. key)
+  end
+
+  function mt:__newindex(key, value)
+    error 'read-only for now'
+  end
+
+  mt.__metatable = false
+
+  return setmetatable({}, mt)
+end
+
+local bridge_env = setmetatable({}, { __index = _G }) -- for now
+
+bridge_env.global = generate_scope_accessor 'g'
+bridge_env.buffer = generate_scope_accessor 'b'
+bridge_env.window = generate_scope_accessor 'w'
+bridge_env.tab    = generate_scope_accessor 't'
+bridge_env.vim    = generate_scope_accessor 'v'
+
+bridge_env.g = bridge_env.global
+bridge_env.b = bridge_env.buffer
+bridge_env.w = bridge_env.window
+bridge_env.t = bridge_env.tab
+bridge_env.v = bridge_env.vim
 
 function vim.bridge(module)
   setmetatable(module, {
