@@ -17,7 +17,11 @@
 -- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 -- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-local realvim = vim
+local realvim      = vim
+local _G           = _G
+local setmetatable = setmetatable
+local type         = type
+local format       = string.format
 
 local function escape_vim_string(s)
   return "'" .. s .. "'"
