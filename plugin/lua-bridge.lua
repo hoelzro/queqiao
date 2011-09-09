@@ -76,6 +76,10 @@ function bridge_env.command(name, impl)
   vim.command(format('command %s lua _G.bridge_commands[%d]()', name, #_G.bridge_commands))
 end
 
+function bridge_env.expand(expr)
+  return vim.eval("expand(" .. escape_vim_string(expr) .. ")")
+end
+
 function vim.bridge(module)
   setmetatable(module, {
     __metatable = false,
