@@ -55,6 +55,8 @@ local function generate_scope_accessor(prefix)
   return setmetatable({}, mt)
 end
 
+_G.bridge_commands = {} -- XXX weak values? how to clean up commands?
+
 local bridge_env = setmetatable({}, { __index = _G }) -- for now
 
 bridge_env.global = generate_scope_accessor 'g'
@@ -68,6 +70,11 @@ bridge_env.b = bridge_env.buffer
 bridge_env.w = bridge_env.window
 bridge_env.t = bridge_env.tab
 bridge_env.v = bridge_env.vim
+
+function bridge_env.command(name, impl)
+  _G.bridge_commands[#_G.bridge_commands + 1] = impl
+  vim.command(format('command %s lua _G.bridge_commands[%d]()', name, #_G.bridge_commands))
+end
 
 function vim.bridge(module)
   setmetatable(module, {
