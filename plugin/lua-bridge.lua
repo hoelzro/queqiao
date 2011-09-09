@@ -19,6 +19,10 @@
 
 local realvim = vim
 
+local function escape_vim_string(s)
+  return "'" .. s .. "'"
+end
+
 local function generate_scope_accessor(prefix)
   local mt = {}
 
