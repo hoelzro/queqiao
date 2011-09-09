@@ -22,9 +22,13 @@ local _G           = _G
 local setmetatable = setmetatable
 local type         = type
 local format       = string.format
+local gsub         = string.gsub
+local sbyte        = string.byte
 
 local function escape_vim_string(s)
-  return "'" .. s .. "'"
+  return '"' .. gsub(s, '.', function(c)
+    return format('\\%03o', sbyte(c))
+  end) .. '"'
 end
 
 local function generate_scope_accessor(prefix)
