@@ -31,7 +31,19 @@ local function generate_scope_accessor(prefix)
   end
 
   function mt:__newindex(key, value)
-    error 'read-only for now'
+    local t = type(value)
+
+    if t == 'nil' then
+      realvim.command('unlet ' .. prefix .. ':' .. key)
+    else
+      if t == 'string' then
+        value = escape_vim_string(value)
+      elseif t ~= 'number' then
+        error "Sorry, I only support numbers, strings, and nils at the moment"
+      end
+
+      realvim.command('let ' .. prefix .. ':' .. key .. ' = ' .. value)
+    end
   end
 
   mt.__metatable = false
