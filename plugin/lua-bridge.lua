@@ -17,6 +17,12 @@
 -- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 -- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+bridge_env = setmetatable({}, { __index = _G }) -- for now
+
+local bridge_env = bridge_env
+
+require 'lua-bridge-functions'
+
 local realvim      = vim
 local _G           = _G
 local setmetatable = setmetatable
@@ -24,60 +30,6 @@ local type         = type
 local format       = string.format
 local gsub         = string.gsub
 local sbyte        = string.byte
-local ipairs       = ipairs
-
-local function dict_from_list(list)
-  local dict = {}
-
-  for _, value in ipairs(list) do
-    dict[value] = true
-  end
-
-  return dict
-end
-
-local coerce_boolean = dict_from_list {
-  'did_filetype',
-  'eventhandler',
-  'haslocaldir',
-  'pumvisible',
-}
-
-local nullaries = {
-  'argc',
-  'argidx',
-  'changenr',
-  'clearmatches',
-  'complete_check',
-  'did_filetype',
-  'eventhandler',
-  'foldtext',
-  'foreground',
-  'getcharmod', -- coerce to non-numbers?
-  'getcmdline',
-  'getcmdpos',
-  'getcmdtype',
-  'getcwd',
-  'getmatches',
-  'getpid',
-  'getqflist',
-  'getwinposx',
-  'getwinposy',
-  'haslocaldir',
-  'hostname',
-  'inputrestore',
-  'inputsave',
-  'localtime',
-  'pumvisible',
-  'serverlist',
-  'tagfiles',
-  'tempname',
-  'undotree',
-  'wincol',
-  'winline',
-  'winrestcmd',
-  'winsaveview',
-}
 
 local function escape_vim_string(s)
   return '"' .. gsub(s, '.', function(c)
@@ -113,21 +65,7 @@ local function generate_scope_accessor(prefix)
   return setmetatable({}, mt)
 end
 
-local function generate_nullary_function(name)
-  if coerce_boolean[name] then
-    return function()
-      return realvim.eval(name .. '()') ~= 0
-    end
-  else
-    return function()
-      return realvim.eval(name .. '()')
-    end
-  end
-end
-
 _G.bridge_commands = {} -- XXX weak values? how to clean up commands?
-
-local bridge_env = setmetatable({}, { __index = _G }) -- for now
 
 bridge_env.global = generate_scope_accessor 'g'
 bridge_env.buffer = generate_scope_accessor 'b'
@@ -140,10 +78,6 @@ bridge_env.b = bridge_env.buffer
 bridge_env.w = bridge_env.window
 bridge_env.t = bridge_env.tab
 bridge_env.v = bridge_env.vim
-
-for _, name in ipairs(nullaries) do
-  bridge_env[name] = generate_nullary_function(name)
-end
 
 function bridge_env.command(name, impl)
   _G.bridge_commands[#_G.bridge_commands + 1] = impl
@@ -160,3 +94,5 @@ function vim.bridge(module)
     __index     = bridge_env,
   })
 end
+
+_G.bridge_env = nil
