@@ -22,5 +22,9 @@ if ! has('lua')
     finish
 endif
 
-let s:script_path = expand('<sfile>:r') . '.lua'
-execute 'luafile ' . s:script_path
+lua << LUA
+oldpath      = package.path
+package.path = vim.eval('expand("<sfile>:h")') .. '/?.lua'
+require 'lua-bridge'
+package.path = oldpath
+LUA
