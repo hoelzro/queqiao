@@ -17,28 +17,14 @@
 -- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 -- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-local setmetatable = setmetatable
-local bridge_env   = setmetatable({}, { __index = _G }) -- for now
+local realvim = vim
+local _G      = _G
+local format  = string.format
 
-_G.bridge_env = bridge_env
-util          = {}
+_G.bridge_commands = {} -- XXX weak values? how to clean up commands?
 
-function util.escape_vim_string(s)
-  return '"' .. gsub(s, '.', function(c)
-    return format('\\%03o', sbyte(c))
-  end) .. '"'
+function bridge_env.command(name, impl)
+  _G.bridge_commands[#_G.bridge_commands + 1] = impl
+  realvim.command(format('command %s lua _G.bridge_commands[%d]()', name, #_G.bridge_commands))
 end
 
-require 'lua-bridge-functions'
-require 'lua-bridge-scopes'
-require 'lua-bridge-commands'
-
-_G.bridge_env = nil
-util          = nil
-
-function vim.bridge(module)
-  setmetatable(module, {
-    __metatable = false,
-    __index     = bridge_env,
-  })
-end

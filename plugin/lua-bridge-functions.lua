@@ -20,6 +20,7 @@
 local ipairs     = ipairs
 local bridge_env = bridge_env
 local realvim    = vim
+local util       = util
 
 local function dict_from_list(list)
   local dict = {}
@@ -88,4 +89,8 @@ end
 
 for _, name in ipairs(nullaries) do
   bridge_env[name] = generate_nullary_function(name)
+end
+
+function bridge_env.expand(expr)
+  return realvim.eval("expand(" .. util.escape_vim_string(expr) .. ")")
 end
