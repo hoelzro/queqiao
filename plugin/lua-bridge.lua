@@ -23,6 +23,8 @@ local type         = type
 local rawset       = rawset
 local smatch       = string.match
 local format       = string.format
+local gsub         = string.gsub
+local sbyte        = string.byte
 
 _G.function_registry = {}
 
