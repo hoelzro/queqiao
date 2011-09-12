@@ -58,10 +58,16 @@ function vim.bridge(module)
           _G.function_registry[#_G.function_registry + 1] = v -- XXX cleanup?
           local id = #_G.function_registry
 
-          -- XXX register function
+          -- XXX return value
           vim.command(format([[
-function! %s()
-  lua _G.function_registry[%d]()
+function! %s(...)
+  lua << LUA
+local args = {}
+for i = 1, vim.eval('a:0') do
+  args[#args + 1] = vim.eval('a:' .. tostring(i))
+end
+_G.function_registry[%d](unpack(args))
+LUA
 endfunction
           ]], k, id))
         end
