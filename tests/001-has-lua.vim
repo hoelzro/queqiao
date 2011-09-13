@@ -1,0 +1,2 @@
+echo has('lua')
+quit
