@@ -37,9 +37,9 @@ function util.escape_vim_string(s)
   end) .. '"'
 end
 
-require 'lua-bridge-functions'
-require 'lua-bridge-scopes'
-require 'lua-bridge-commands'
+require 'queqiao-functions'
+require 'queqiao-scopes'
+require 'queqiao-commands'
 
 _G.bridge_env = nil
 util          = nil

@@ -25,6 +25,6 @@ endif
 lua << LUA
 oldpath      = package.path
 package.path = vim.eval('expand("<sfile>:h")') .. '/?.lua'
-require 'lua-bridge'
+require 'queqiao'
 package.path = oldpath
 LUA
