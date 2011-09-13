@@ -8,6 +8,11 @@ In Chinese mythology, queqiao (or 鵲橋) is a bridge of birds that represents t
 are typical named after astronomy/space terms (Telescope for unit testing, Orbit for MVC web development),
 so I figured a celestial bridge would be the perfect name for this project.
 
+# How do I say "queqiao?"
+
+It sounds kind of like _chweh-cheeow_.  For my butchered pronunciation, check http://hoelz.ro/projects/queqiao for
+my pronunciation of the word.
+
 # Why Lua?
 
 Several reasons, actually.
