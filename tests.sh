@@ -2,6 +2,12 @@
 
 which runVimTests.sh >/dev/null 2>&1
 
+if [[ "x$1" == "xclean" ]]; then
+    rm tests/*.msgout
+    rm tests/*.msgresult
+    exit
+fi
+
 if [[ $? -eq 0 ]]; then
     runVimTests.sh --pure tests/
 else
