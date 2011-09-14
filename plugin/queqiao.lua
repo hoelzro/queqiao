@@ -44,7 +44,7 @@ require 'queqiao-commands'
 _G.bridge_env = nil
 util          = nil
 
-function vim.bridge(module)
+rawset(vim, 'bridge', function(module)
   local function_storage = setmetatable({}, { __index = bridge_env })
 
   setmetatable(module, {
@@ -77,4 +77,4 @@ endfunction
       end
     end
   })
-end
+end)

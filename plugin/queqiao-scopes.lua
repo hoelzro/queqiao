@@ -56,11 +56,12 @@ local function generate_scope_accessor(prefix)
   return setmetatable({}, mt)
 end
 
-bridge_env.global = generate_scope_accessor 'g'
-bridge_env.buffer = generate_scope_accessor 'b'
-bridge_env.window = generate_scope_accessor 'w'
-bridge_env.tab    = generate_scope_accessor 't'
-bridge_env.vim    = generate_scope_accessor 'v'
+bridge_env.global  = generate_scope_accessor 'g'
+bridge_env.buffer  = generate_scope_accessor 'b'
+bridge_env.window  = generate_scope_accessor 'w'
+bridge_env.tab     = generate_scope_accessor 't'
+local vim_accessor = generate_scope_accessor 'v'
+setmetatable(vim, { __index = vim_accessor, __newindex = vim_accessor, __metatable = false })
 
 bridge_env.g = bridge_env.global
 bridge_env.b = bridge_env.buffer
