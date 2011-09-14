@@ -22,4 +22,12 @@ for _, scope in ipairs { env[scope], env[scope_abbr] } do
   realvim.command('echo exists("' .. scope_abbr .. ':foo")')
 
   print(scope.foo)
+
+  scope.foo = 17
+
+  print(scope.foo)
+
+  realvim.command('unlet ' .. scope_abbr .. ':foo')
+
+  print(scope.foo)
 end
