@@ -17,4 +17,6 @@ for _, scope in ipairs { env[scope], env[scope_abbr] } do
   print(scope.statusmsg)
   realvim.command('let ' .. scope_abbr .. ':statusmsg = "baz"')
   print(scope.statusmsg)
+
+  print(scope.foo)
 end

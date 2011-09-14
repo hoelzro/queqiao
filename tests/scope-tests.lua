@@ -20,4 +20,6 @@ for _, scope in ipairs { env[scope], env[scope_abbr] } do
   scope.foo = nil
 
   realvim.command('echo exists("' .. scope_abbr .. ':foo")')
+
+  print(scope.foo)
 end
