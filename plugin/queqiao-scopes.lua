@@ -28,7 +28,11 @@ local function generate_scope_accessor(prefix)
   local mt = {}
 
   function mt:__index(key)
-    return realvim.eval(prefix .. ':' .. key)
+    if realvim.eval('exists(' .. util.escape_vim_string(prefix .. ':' .. key) .. ')') == 1 then
+      return realvim.eval(prefix .. ':' .. key)
+    else
+      return nil
+    end
   end
 
   function mt:__newindex(key, value)
