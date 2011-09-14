@@ -37,9 +37,9 @@ function util.escape_vim_string(s)
   end) .. '"'
 end
 
-require 'queqiao-functions'
-require 'queqiao-scopes'
-require 'queqiao-commands'
+require 'queqiao.functions'
+require 'queqiao.scopes'
+require 'queqiao.commands'
 
 _G.bridge_env = nil
 util          = nil
