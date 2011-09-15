@@ -19,20 +19,21 @@ local function compare(a, b)
         end
       end
     end
-  
+
     return ok
   end
   return a == b
 end
 
 local coerce_boolean = {
+  append       = true,
   did_filetype = true,
   eventhandler = true,
   haslocaldir  = true,
   pumvisible  = true,
 }
 
-local nullaries = {
+local functions = {
   'argc',
   'argidx',
   'changenr',
@@ -69,7 +70,7 @@ local nullaries = {
 
 local env = getfenv(1)
 
-for _, name in ipairs(nullaries) do
+for _, name in ipairs(functions) do
   local got      = env[name]()
   local expected = vim.eval(name .. '()')
 
@@ -79,3 +80,6 @@ for _, name in ipairs(nullaries) do
 
   print(name .. ' - ' .. tostring(compare(got, expected)))
 end
+
+local value = append(0, 'foo')
+print('append - ' .. tostring(value))
