@@ -65,6 +65,7 @@ local vim_functions = {
   'getwinposy',
   'haslocaldir',
   'hostname',
+  'input',
   'inputrestore',
   'inputsave',
   'line',
