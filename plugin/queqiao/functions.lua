@@ -49,6 +49,7 @@ local vim_functions = {
   'clearmatches',
   'complete_check',
   'did_filetype',
+  'expand',
   'eventhandler',
   'foldtext',
   'foreground',
@@ -112,8 +113,4 @@ end
 
 for _, name in ipairs(vim_functions) do
   bridge_env[name] = generate_function(name)
-end
-
-function bridge_env.expand(expr)
-  return realvim.eval("expand(" .. util.escape_vim_string(expr) .. ")")
 end
