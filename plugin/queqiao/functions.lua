@@ -21,6 +21,7 @@ local ipairs     = ipairs
 local bridge_env = bridge_env
 local realvim    = vim
 local util       = util
+local tconcat    = table.concat
 
 local function dict_from_list(list)
   local dict = {}
@@ -33,13 +34,15 @@ local function dict_from_list(list)
 end
 
 local coerce_boolean = dict_from_list {
+  'append',
   'did_filetype',
   'eventhandler',
   'haslocaldir',
   'pumvisible',
 }
 
-local nullaries = {
+local vim_functions = {
+  'append',
   'argc',
   'argidx',
   'changenr',
@@ -75,20 +78,40 @@ local nullaries = {
   'winsaveview',
 }
 
-local function generate_nullary_function(name)
+local function serialize_args(...)
+  local n = select('#', ...)
+  local t = {}
+
+  for i = 1, n do
+    local v    = select(i, ...)
+    local type = type(v)
+
+    if type == 'number' then
+      v = tostring(v)
+    elseif type == 'string' then
+      v = util.escape_vim_string(v)
+    end
+
+    t[#t + 1] = v
+  end
+
+  return tconcat(t, ',')
+end
+
+local function generate_function(name)
   if coerce_boolean[name] then
-    return function()
-      return realvim.eval(name .. '()') ~= 0
+    return function(...)
+      return realvim.eval(name .. '(' .. serialize_args(...) .. ')') ~= 0
     end
   else
-    return function()
-      return realvim.eval(name .. '()')
+    return function(...)
+      return realvim.eval(name .. '(' .. serialize_args(...) .. ')')
     end
   end
 end
 
-for _, name in ipairs(nullaries) do
-  bridge_env[name] = generate_nullary_function(name)
+for _, name in ipairs(vim_functions) do
+  bridge_env[name] = generate_function(name)
 end
 
 function bridge_env.expand(expr)
