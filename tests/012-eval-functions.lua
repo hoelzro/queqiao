@@ -85,3 +85,4 @@ local value = append(0, 'foo')
 print('append - ' .. tostring(value))
 
 print('expand - ' .. tostring(expand('%') == vim.eval('expand("%")')))
+print('line - ' .. tostring(line('.') == vim.eval('line(".")')))

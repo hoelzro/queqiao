@@ -32,3 +32,4 @@ winrestcmd - true
 winsaveview - true
 append - false
 expand - true
+line - true
