@@ -5,13 +5,12 @@ Provides a higher-level interface for writing Vim plugins in Lua.
 # Why Queqiao?
 
 In Chinese mythology, queqiao (or 鵲橋) is a bridge of birds that represents the Milky Way.  Lua projects
-are typical named after astronomy/space terms (Telescope for unit testing, Orbit for MVC web development),
+are typically named after astronomy/space terms (Telescope for unit testing, Orbit for MVC web development),
 so I figured a celestial bridge would be the perfect name for this project.
 
 # How do I say "queqiao?"
 
-It sounds kind of like _chweh-cheeow_.  For my butchered pronunciation, check http://hoelz.ro/projects/queqiao for
-my pronunciation of the word.
+It sounds kind of like _chweh-cheeow_.  For my butchered pronunciation, check http://hoelz.ro/projects/queqiao.
 
 # Why Lua?
 
@@ -46,5 +45,5 @@ and this:
 
 are fairly simple.
 
-If you're not satisfied with these reasons and **need** to have this function for your language, I encourage
+If you're not satisfied with these reasons and **need** to have this functionality for your language, I encourage
 you to port it!
