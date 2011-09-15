@@ -67,6 +67,7 @@ local vim_functions = {
   'hostname',
   'inputrestore',
   'inputsave',
+  'line',
   'localtime',
   'pumvisible',
   'serverlist',
