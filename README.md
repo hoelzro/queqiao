@@ -30,10 +30,13 @@ all communities to make use of this plugin.
 In spite of (or perhaps because of) its simplicity, Lua is an extremely powerful language.  Because of its features,
 implementing things like this:
 
+```lua
     b.my_plugin_loaded = 1 -- equivalent to let b:my_plugin_loaded = 1
+```
 
 and this:
 
+```lua
     function PrintNumLines()
         print(line '$')
     end --[[ equivalent to
@@ -42,6 +45,7 @@ and this:
       endfunction
     ]]
     -- you can even do :call PrintNumLines()!
+```
 
 are fairly simple.
 
