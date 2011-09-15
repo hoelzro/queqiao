@@ -31,3 +31,4 @@ winline - true
 winrestcmd - true
 winsaveview - true
 append - false
+expand - true
