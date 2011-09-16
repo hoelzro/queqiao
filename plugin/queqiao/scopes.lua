@@ -43,6 +43,8 @@ local function generate_scope_accessor(prefix)
     else
       if t == 'string' then
         value = util.escape_vim_string(value)
+      elseif t == 'boolean' then
+        value = value and 1 or 0
       elseif t ~= 'number' then
         error "Sorry, I only support numbers, strings, and nils at the moment"
       end

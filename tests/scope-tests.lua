@@ -30,4 +30,12 @@ for _, scope in ipairs { env[scope], env[scope_abbr] } do
   realvim.command('unlet ' .. scope_abbr .. ':foo')
 
   print(scope.foo)
+
+  scope.foo = true
+
+  print(scope.foo)
+
+  scope.foo = false
+
+  realvim.command('echo ' .. scope_abbr .. ':foo')
 end
