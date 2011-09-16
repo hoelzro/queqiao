@@ -46,7 +46,7 @@ local function generate_scope_accessor(prefix)
       elseif t == 'boolean' then
         value = value and 1 or 0
       elseif t ~= 'number' then
-        error "Sorry, I only support numbers, strings, and nils at the moment"
+        error "Sorry, I only support numbers, booleans, strings, and nils at the moment"
       end
 
       realvim.command('let ' .. prefix .. ':' .. key .. ' = ' .. value)
