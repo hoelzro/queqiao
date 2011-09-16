@@ -35,21 +35,41 @@ local function generate_scope_accessor(prefix)
     end
   end
 
-  function mt:__newindex(key, value)
-    local t = type(value)
+  if prefix == 'v' then
+    function mt:__newindex(key, value)
+      local t = type(value)
 
-    if t == 'nil' then
-      realvim.command('unlet ' .. prefix .. ':' .. key)
-    else
-      if t == 'string' then
-        value = util.escape_vim_string(value)
-      elseif t == 'boolean' then
-        value = value and 1 or 0
-      elseif t ~= 'number' then
-        error "Sorry, I only support numbers, booleans, strings, and nils at the moment"
+      if t ~= 'nil' then
+        if t == 'string' then
+          value = util.escape_vim_string(value)
+        elseif t == 'boolean' then
+          value = value and 1 or 0
+        elseif t ~= 'number' then
+          error "Sorry, I only support numbers, booleans, strings, and nils at the moment"
+        end
+
+        realvim.command('let ' .. prefix .. ':' .. key .. ' = ' .. value)
+      end
+    end
+  else
+    function mt:__newindex(key, value)
+      local t = type(value)
+
+      if realvim.eval('exists(' .. util.escape_vim_string(prefix .. ':' .. key) .. ')') == 1 then
+        realvim.command('unlet ' .. prefix .. ':' .. key)
       end
 
-      realvim.command('let ' .. prefix .. ':' .. key .. ' = ' .. value)
+      if t ~= 'nil' then
+        if t == 'string' then
+          value = util.escape_vim_string(value)
+        elseif t == 'boolean' then
+          value = value and 1 or 0
+        elseif t ~= 'number' then
+          error "Sorry, I only support numbers, booleans, strings, and nils at the moment"
+        end
+
+        realvim.command('let ' .. prefix .. ':' .. key .. ' = ' .. value)
+      end
     end
   end
 
