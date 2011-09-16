@@ -38,4 +38,11 @@ for _, scope in ipairs { env[scope], env[scope_abbr] } do
   scope.foo = false
 
   realvim.command('echo ' .. scope_abbr .. ':foo')
+
+  realvim.command('unlet ' .. scope_abbr .. ':foo')
+  realvim.command('let ' .. scope_abbr .. ':foo = []')
+
+  scope.foo = 17
+
+  scope.foo = nil
 end
