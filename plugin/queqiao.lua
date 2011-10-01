@@ -20,6 +20,7 @@
 local setmetatable = setmetatable
 local bridge_env   = setmetatable({}, { __index = _G }) -- for now
 local type         = type
+local rawget       = rawget
 local rawset       = rawset
 local smatch       = string.match
 local format       = string.format
@@ -70,6 +71,11 @@ _G.function_registry[%d](unpack(args))
 LUA
 endfunction
           ]], k, id))
+        end
+        rawset(function_storage, k, v)
+      elseif t == 'nil' then
+        if type(rawget(function_storage, k)) == 'function' then
+          vim.command('delfunction ' .. k)
         end
         rawset(function_storage, k, v)
       else
