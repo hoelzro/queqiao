@@ -73,7 +73,7 @@ endfunction
         end
         rawset(function_storage, k, v)
       else
-        rawset(self, k, v)
+        rawset(function_storage, k, v)
       end
     end
   })
