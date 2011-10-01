@@ -11,4 +11,6 @@ end
 
 realvim.command 'echo exists("*FooBar")'
 
--- overwrite function (exists '*FooBar')
+FooBar = nil
+
+realvim.command 'echo exists("*FooBar")'
