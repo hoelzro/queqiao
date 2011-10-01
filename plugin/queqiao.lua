@@ -72,15 +72,13 @@ LUA
 endfunction
           ]], k, id))
         end
-        rawset(function_storage, k, v)
       elseif t == 'nil' then
         if type(rawget(function_storage, k)) == 'function' then
           vim.command('delfunction ' .. k)
         end
-        rawset(function_storage, k, v)
-      else
-        rawset(function_storage, k, v)
       end
+
+      rawset(function_storage, k, v)
     end
   })
 end)
