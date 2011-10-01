@@ -28,3 +28,7 @@ function bridge_env.command(name, impl)
   realvim.command(format('command %s lua _G.bridge_commands[%d]()', name, #_G.bridge_commands))
 end
 
+function bridge_env.autocmd(event, pattern, action)
+  _G.function_registry[#_G.function_registry + 1] = action
+  realvim.command(format('autocmd %s %s lua _G.function_registry[%d]()', event, pattern, #_G.function_registry))
+end
