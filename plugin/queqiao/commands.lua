@@ -17,9 +17,11 @@
 -- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 -- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-local realvim = vim
-local _G      = _G
-local format  = string.format
+local realvim  = vim
+local _G       = _G
+local format   = string.format
+local type     = type
+local tostring = tostring
 
 _G.bridge_commands = {} -- XXX weak values? how to clean up commands?
 
@@ -29,6 +31,9 @@ function bridge_env.command(name, impl)
 end
 
 function bridge_env.autocmd(event, pattern, action)
-  _G.function_registry[#_G.function_registry + 1] = action
-  realvim.command(format('autocmd %s %s lua _G.function_registry[%d]()', event, pattern, #_G.function_registry))
+  if type(action) == 'function' then
+    _G.function_registry[#_G.function_registry + 1] = action
+    action = 'lua _G.function_registry[' .. tostring(#_G.function_registry) .. ']()'
+  end
+  realvim.command(format('autocmd %s %s %s', event, pattern, action))
 end

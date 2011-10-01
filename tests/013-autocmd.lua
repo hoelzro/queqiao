@@ -8,6 +8,7 @@ local function countbuffers()
 end
 
 autocmd('BufCreate', '*', countbuffers)
+autocmd('BufCreate', '*', "echo 'in autocmd'")
 
 print(count)
 realvim.command ':new'
