@@ -22,6 +22,7 @@ local _G       = _G
 local format   = string.format
 local type     = type
 local tostring = tostring
+local util     = util
 
 _G.bridge_commands = {} -- XXX weak values? how to clean up commands?
 
@@ -32,8 +33,8 @@ end
 
 function bridge_env.autocmd(event, pattern, action)
   if type(action) == 'function' then
-    _G.function_registry[#_G.function_registry + 1] = action
-    action = 'lua _G.function_registry[' .. tostring(#_G.function_registry) .. ']()'
+    local id = util.register_function(action)
+    action   = 'lua _G.function_registry[' .. tostring(id) .. ']()'
   end
   realvim.command(format('autocmd %s %s %s', event, pattern, action))
 end

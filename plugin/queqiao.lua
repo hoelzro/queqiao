@@ -17,20 +17,21 @@
 -- AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 -- WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-local setmetatable = setmetatable
-local bridge_env   = setmetatable({}, { __index = _G }) -- for now
-local type         = type
-local rawget       = rawget
-local rawset       = rawset
-local smatch       = string.match
-local format       = string.format
-local gsub         = string.gsub
-local sbyte        = string.byte
+local setmetatable      = setmetatable
+local bridge_env        = setmetatable({}, { __index = _G }) -- for now
+local type              = type
+local rawget            = rawget
+local rawset            = rawset
+local smatch            = string.match
+local format            = string.format
+local gsub              = string.gsub
+local sbyte             = string.byte
+local function_registry = {}
+local util              = {}
 
-_G.function_registry = {}
-
-_G.bridge_env = bridge_env
-util          = {}
+_G.function_registry = function_registry
+_G.bridge_env        = bridge_env
+_G.util              = util
 
 function util.escape_vim_string(s)
   return '"' .. gsub(s, '.', function(c)
@@ -38,12 +39,18 @@ function util.escape_vim_string(s)
   end) .. '"'
 end
 
+function util.register_function(fn)
+  function_registry[#function_registry + 1] = fn -- XXX cleanup?
+  return #function_registry
+end
+
 require 'queqiao.functions'
 require 'queqiao.scopes'
 require 'queqiao.commands'
+require 'queqiao.source'
 
 _G.bridge_env = nil
-util          = nil
+_G.util       = nil
 
 rawset(vim, 'bridge', function(module)
   local function_storage = setmetatable({}, { __index = bridge_env })
@@ -56,9 +63,7 @@ rawset(vim, 'bridge', function(module)
 
       if t == 'function' then
         if smatch(k, '^%u') then
-          _G.function_registry[#_G.function_registry + 1] = v -- XXX cleanup?
-          local id = #_G.function_registry
-
+          local id = util.register_function(v)
           -- XXX return value
           vim.command(format([[
 function! %s(...)
