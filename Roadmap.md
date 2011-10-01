@@ -20,6 +20,7 @@
   - [✓] Nil
   - [ ] Tables
 - [ ] A user should be able to :source plugin.lua
+- [ ] User-defined commands should be definable in Lua
 
 Later
 =====
