@@ -47,7 +47,6 @@ end
 require 'queqiao.functions'
 require 'queqiao.scopes'
 require 'queqiao.commands'
-require 'queqiao.source'
 
 _G.bridge_env = nil
 _G.util       = nil
