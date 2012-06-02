@@ -51,3 +51,7 @@ are fairly simple.
 
 If you're not satisfied with these reasons and **need** to have this functionality for your language, I encourage
 you to port it!
+
+# Contact Me
+
+rob at hoelz.ro
