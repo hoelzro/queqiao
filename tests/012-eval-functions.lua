@@ -1,27 +1,75 @@
 module('eval_functions_test', vim.bridge)
 
+local comparators = setmetatable({}, { __index = function(self, _)
+  return self.general
+end } )
+
 local function compare(a, b)
-  if type(a) == 'table' and type(b) == 'table' then
-    local ok = true
+  local typea = vim.type(a)
+  local typeb = vim.type(b)
 
-    for k, v in pairs(a) do
-      if not compare(v, b[k]) then
-        ok = false
-        break
-      end
-    end
-
-    if ok then
-      for k in pairs(b) do
-        if a[k] == nil then
-          ok = false
-          break
-        end
-      end
-    end
-
-    return ok
+  if typea ~= typeb then
+    return false
   end
+
+  return comparators[typea](a, b)
+end
+
+function comparators.table(a, b)
+  for k, v in pairs(a) do
+    if not compare(v, b[k]) then
+      return false
+    end
+  end
+
+  if ok then
+    for k in pairs(b) do
+      if a[k] == nil then
+        return false
+      end
+    end
+  end
+
+  return true
+end
+
+function comparators.list(a, b)
+  local lena = #a
+  local lenb = #b
+
+  if lena ~= lenb then
+    return false
+  end
+
+  for i = 1, lena do
+    local elementa = a[i]
+    local elementb = b[i]
+
+    if not compare(a[i], b[i]) then
+      return false
+    end
+  end
+
+  return true
+end
+
+function comparators.dict(a, b)
+  for k, v in a() do
+    if not compare(v, b[k]) then
+      return false
+    end
+  end
+
+  for k, v in b() do
+    if a[k] == nil then
+      return false
+    end
+  end
+
+  return true
+end
+
+function comparators.general(a, b)
   return a == b
 end
 
