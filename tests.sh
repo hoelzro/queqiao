@@ -9,8 +9,9 @@ if [[ $? -ne 0 ]]; then
 fi
 
 if [[ "x$1" == "xclean" ]]; then
-    rm tests/*.msgout
-    rm tests/*.msgresult
+    rm -f tests/*.msgout
+    rm -f tests/*.msgresult
+    rm -f tests/*.out
 elif [[ "x$1" != "x" ]]; then
     runVimTests.sh --pure "$1"
 else
