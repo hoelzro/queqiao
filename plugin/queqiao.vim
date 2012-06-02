@@ -22,6 +22,11 @@ if ! has('lua')
     finish
 endif
 
+if ! has('patch490')
+    echomsg 'Patch 7.3.490 is required for this plugin'
+    finish
+endif
+
 lua << LUA
 oldpath      = package.path
 package.path = vim.eval('expand("<sfile>:h")') .. '/?.lua'
